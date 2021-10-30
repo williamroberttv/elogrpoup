@@ -1,0 +1,33 @@
+.inputContainer{
+  label{
+    margin: 16px 0;
+    font-size: 16px;
+    font-weight: 700;
+  }
+  span {
+    display: flex;
+    align-items: center;
+    color: #c53030;
+    margin: 10px 0;
+    svg {
+      margin-left: 10px;
+    }
+   }
+}
+.inputContent{
+  display: flex;
+  background: #f3f3f3;
+  border-radius: 8px;
+  border: 1px solid #232129;
+  padding: 16px;
+  align-items: center;
+
+  margin: 10px 0;
+
+  input{
+    height: 22px;
+    border: none;
+    background: transparent;
+    flex: 1;
+  }
+}

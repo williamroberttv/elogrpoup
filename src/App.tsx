@@ -1,7 +1,8 @@
+import Home from './pages/Home';
+import './styles/global.module.scss';
+
 function App() {
-  return(
-    <h1>Olá</h1>
-  )
+  return <Home />;
 }
 
-export default App
+export default App;
