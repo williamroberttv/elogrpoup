@@ -1,15 +1,9 @@
-import { InputHTMLAttributes, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useField } from '@unform/core';
-import { IconBaseProps } from 'react-icons';
 
 import { FiAlertCircle } from 'react-icons/fi';
 import styles from './styles.module.scss';
-
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  name: string;
-  labelName?: string;
-  icon?: React.ComponentType<IconBaseProps>;
-}
+import { InputProps } from '../../utils/types';
 
 const Input = ({ name, labelName, icon: Icon, ...rest }: InputProps) => {
   const inputRef = useRef(null);
@@ -32,7 +26,7 @@ const Input = ({ name, labelName, icon: Icon, ...rest }: InputProps) => {
       </div>
       {error && (
         <span>
-          {error}
+          <strong>{error}</strong>
           <FiAlertCircle color="#c53030" size={20} />
         </span>
       )}
