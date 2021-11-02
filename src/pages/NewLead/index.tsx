@@ -6,21 +6,52 @@ import { Scope } from '@unform/core';
 import Input from '../../components/Input';
 import logo from '../../assets/logo.jpg';
 import styles from './styles.module.scss';
-import InputCheck from '../../components/InputCheck';
+import Checkbox from '../../components/Checkbox';
+
+interface NewLeadProps {
+  name: string;
+  contact: string;
+  email: string;
+  categories: {
+    rpa: boolean;
+    bpm: boolean;
+    analytics: boolean;
+    produtoDigital: boolean;
+  };
+}
 
 const NewLead = () => {
   const [checkedBoxes, setCheckedBoxes] = useState<string[]>([]);
 
   const checkAllBoxes = () => {
     if (checkedBoxes.length === 0) {
-      setCheckedBoxes(['rpa', 'bpm', 'produto digital', 'analytics']);
+      setCheckedBoxes(['rpa', 'bpm', 'produtoDigital', 'analytics']);
     } else {
       setCheckedBoxes([]);
     }
   };
+  const handleNewLead = (data: NewLeadProps) => {
+    console.log(data);
+    const { categories } = data;
 
+    const getCategories = [
+      categories.bpm && 'rpa',
+      categories.bpm && 'bpm',
+      categories.produtoDigital && 'Produto digital',
+      categories.analytics && 'analytics'
+    ];
+
+    const formatedCategories = getCategories.filter((item) => item);
+    const formatedData = {
+      name: data.name,
+      email: data.email,
+      contact: data.contact,
+      categories: formatedCategories
+    };
+    console.log(formatedData);
+  };
   return (
-    <Form onSubmit={(data) => console.log(data)}>
+    <Form onSubmit={handleNewLead}>
       <div className={styles.infoContainer}>
         <header>
           <img src={logo} alt="logo elogroup" />
@@ -34,36 +65,28 @@ const NewLead = () => {
         <header>
           <h1>Novo Lead</h1>
         </header>
-        <InputCheck
+        <Checkbox
           name="checkall"
           description="Marcar Todos"
           onChange={checkAllBoxes}
         />
-        <Scope path="categories[rpa]">
-          <InputCheck
+        <Scope path="categories">
+          <Checkbox
             description="RPA"
             checked={checkedBoxes.includes('rpa') ? true : undefined}
             name="rpa"
           />
-        </Scope>
-        <Scope path="categories[produto digital]">
-          <InputCheck
+          <Checkbox
             description="Produto digital"
-            checked={
-              checkedBoxes.includes('produto digital') ? true : undefined
-            }
-            name="produto digital"
+            checked={checkedBoxes.includes('produtoDigital') ? true : undefined}
+            name="produtoDigital"
           />
-        </Scope>
-        <Scope path="categories[analytics]">
-          <InputCheck
+          <Checkbox
             description="Analytics"
             checked={checkedBoxes.includes('analytics') ? true : undefined}
             name="analytics"
           />
-        </Scope>
-        <Scope path="categories[bpm]">
-          <InputCheck
+          <Checkbox
             description="BPM"
             checked={checkedBoxes.includes('bpm') ? true : undefined}
             name="bpm"
