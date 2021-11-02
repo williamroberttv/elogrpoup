@@ -1,4 +1,4 @@
-import { InputHTMLAttributes } from 'react';
+import { InputHTMLAttributes, ReactNode } from 'react';
 import { IconBaseProps } from 'react-icons';
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -32,4 +32,19 @@ export interface NewLeadProps {
     analytics: boolean;
     produtoDigital: boolean;
   };
+}
+
+export interface LeadContextProps {
+  leads: Leads[];
+  // eslint-disable-next-line no-unused-vars
+  getNewLead: (object: Leads) => void;
+}
+export interface LeadProviderProps {
+  children: ReactNode;
+}
+export interface Leads {
+  name: string;
+  email: string;
+  contact: string;
+  categories: (string | false)[];
 }

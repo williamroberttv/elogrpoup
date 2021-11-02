@@ -1,18 +1,5 @@
-import { createContext, ReactNode, useCallback, useState } from 'react';
-
-interface LeadContextProps {
-  leads: Leads[];
-  getNewLead: (object: Leads) => void;
-}
-interface LeadProviderProps {
-  children: ReactNode;
-}
-interface Leads {
-  name: string;
-  email: string;
-  contact: string;
-  categories: (string | false)[];
-}
+import { createContext, useCallback, useState } from 'react';
+import { LeadContextProps, LeadProviderProps, Leads } from '../utils/types';
 
 export const LeadContext = createContext({} as LeadContextProps);
 
