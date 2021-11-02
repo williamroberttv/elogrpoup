@@ -1,0 +1,27 @@
+.container{
+  background: #f3f3f3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  height: 42px;
+  margin: 10px 0;
+  font-weight: 500;
+  &:hover{
+    cursor: grab;
+  }
+}
+
+.isDragging{
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  height: 42px;
+  margin: 10px 0;
+  cursor: grabbing;
+  p{
+    opacity: 0;
+  }
+}
