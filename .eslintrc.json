@@ -22,7 +22,7 @@
         "prettier"
     ],
     "rules": {
-        "prettier/prettier" : "error",
+        "prettier/prettier" : "warn",
         "react/prop-types": "off",
         "react/jsx-one-expression-per-line": "off",
         "comma-dangle": ["error", "never"],

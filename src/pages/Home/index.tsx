@@ -1,21 +1,33 @@
+import { useRef, useState } from 'react';
 import { Form } from '@unform/web';
-import { FiUser, FiLock } from 'react-icons/fi';
-import * as yup from 'yup';
-import { useRef } from 'react';
 import { FormHandles } from '@unform/core';
-import Input from '../../components/Input';
-import styles from './styles.module.scss';
 
+import { useHistory } from 'react-router-dom';
+
+import * as yup from 'yup';
+import { FiUser, FiLock, FiUnlock } from 'react-icons/fi';
+
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
+
+import styles from './styles.module.scss';
+import Input from '../../components/Input';
 import logo from '../../assets/logo.jpg';
+
 import { getValidationErrors } from '../../utils/getValidationErrors';
+import { Data } from '../../utils/types';
 
 const Home = () => {
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [disabledButton, setDisabledButton] = useState(false);
   const formRef = useRef<FormHandles>(null);
+  const handleShowPassword = () => setShowPassword((prevState) => !prevState);
+
+  const history = useHistory();
   // eslint-disable-next-line no-useless-escape
   const validatePassword = /^(?=.*[a-z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/;
 
-  const handleSubmit = async (data: object) => {
-    console.log(data);
+  const handleSubmit = async (data: Data) => {
     try {
       formRef.current?.setErrors({});
 
@@ -40,12 +52,30 @@ const Home = () => {
       await schema.validate(data, {
         abortEarly: false
       });
+
+      setDisabledButton(true);
+      localStorage.setItem('user', data.user);
+      toast.success('Cadastro realizado!');
+
+      setTimeout(() => {
+        history.push('dashboard');
+      }, 5000);
     } catch (err) {
       if (err instanceof yup.ValidationError) {
         const errors = getValidationErrors(err);
         formRef.current?.setErrors(errors);
       }
     }
+  };
+  const handleIconPassword = () => {
+    if (showPassword) {
+      return (
+        <FiUnlock onClick={handleShowPassword} style={{ cursor: 'pointer' }} />
+      );
+    }
+    return (
+      <FiLock onClick={handleShowPassword} style={{ cursor: 'pointer' }} />
+    );
   };
 
   return (
@@ -58,17 +88,21 @@ const Home = () => {
         <Input name="user" labelName="Usuário" icon={FiUser} />
         <Input
           name="password"
-          type="password"
+          type={showPassword ? '' : 'password'}
           labelName="Senha"
-          icon={FiLock}
+          icon={handleIconPassword}
         />
         <Input
           name="passwordConfirmation"
-          type="password"
+          type={showPassword ? '' : 'password'}
           labelName="Confirmação de senha"
+          icon={handleIconPassword}
         />
-        <button type="submit">Registrar</button>
+        <button type="submit" disabled={disabledButton}>
+          Registrar
+        </button>
       </Form>
+      <ToastContainer />
     </div>
   );
 };

@@ -1,28 +1,25 @@
-import { useState } from 'react';
+import { useState, useContext, useRef } from 'react';
 import { Form } from '@unform/web';
 import { MdEmail, MdPhone } from 'react-icons/md';
+import * as yup from 'yup';
 
-import { Scope } from '@unform/core';
+import { FormHandles, Scope } from '@unform/core';
+import { useHistory } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 import Input from '../../components/Input';
 import logo from '../../assets/logo.jpg';
 import styles from './styles.module.scss';
 import Checkbox from '../../components/Checkbox';
-
-interface NewLeadProps {
-  name: string;
-  contact: string;
-  email: string;
-  categories: {
-    rpa: boolean;
-    bpm: boolean;
-    analytics: boolean;
-    produtoDigital: boolean;
-  };
-}
+import { NewLeadProps } from '../../utils/types';
+import { LeadContext } from '../../context/leadContext';
+import { getValidationErrors } from '../../utils/getValidationErrors';
 
 const NewLead = () => {
   const [checkedBoxes, setCheckedBoxes] = useState<string[]>([]);
-
+  const [disabledButton, setDisabledButton] = useState(false);
+  const formRef = useRef<FormHandles>(null);
+  const history = useHistory();
   const checkAllBoxes = () => {
     if (checkedBoxes.length === 0) {
       setCheckedBoxes(['rpa', 'bpm', 'produtoDigital', 'analytics']);
@@ -30,28 +27,54 @@ const NewLead = () => {
       setCheckedBoxes([]);
     }
   };
-  const handleNewLead = (data: NewLeadProps) => {
-    console.log(data);
-    const { categories } = data;
+  const { getNewLead } = useContext(LeadContext);
 
-    const getCategories = [
-      categories.bpm && 'rpa',
-      categories.bpm && 'bpm',
-      categories.produtoDigital && 'Produto digital',
-      categories.analytics && 'analytics'
-    ];
+  const handleNewLead = async (data: NewLeadProps) => {
+    try {
+      const { categories } = data;
 
-    const formatedCategories = getCategories.filter((item) => item);
-    const formatedData = {
-      name: data.name,
-      email: data.email,
-      contact: data.contact,
-      categories: formatedCategories
-    };
-    console.log(formatedData);
+      const getCategories = [
+        categories.bpm && 'rpa',
+        categories.bpm && 'bpm',
+        categories.produtoDigital && 'Produto digital',
+        categories.analytics && 'analytics'
+      ];
+
+      const formatedCategories = getCategories.filter((item) => item);
+      const formatedData = {
+        name: data.name,
+        email: data.email,
+        contact: data.contact,
+        categories: formatedCategories
+      };
+
+      formRef.current?.setErrors({});
+
+      const schema = yup.object().shape({
+        name: yup.string().required('Digite o nome da empresa'),
+        email: yup.string().required('E-mail obrigatório'),
+        contact: yup.string().required('Digite um telefone para contato')
+      });
+
+      await schema.validate(data, {
+        abortEarly: false
+      });
+
+      setDisabledButton(true);
+      getNewLead(formatedData);
+      toast.success('Novo lead cadastrado com sucesso!');
+
+      setTimeout(() => history.push('dashboard'), 5000);
+    } catch (err) {
+      if (err instanceof yup.ValidationError) {
+        const errors = getValidationErrors(err);
+        formRef.current?.setErrors(errors);
+      }
+    }
   };
+
   return (
-    <Form onSubmit={handleNewLead}>
+    <Form onSubmit={handleNewLead} ref={formRef}>
       <div className={styles.infoContainer}>
         <header>
           <img src={logo} alt="logo elogroup" />
@@ -92,8 +115,11 @@ const NewLead = () => {
             name="bpm"
           />
         </Scope>
-        <button type="submit">Salvar</button>
+        <button type="submit" disabled={disabledButton}>
+          Salvar
+        </button>
       </div>
+      <ToastContainer />
     </Form>
   );
 };
