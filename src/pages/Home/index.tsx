@@ -1,9 +1,7 @@
 import { useRef, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
-
-import { useHistory } from 'react-router-dom';
-
 import * as yup from 'yup';
 import { FiUser, FiLock, FiUnlock } from 'react-icons/fi';
 
@@ -12,7 +10,7 @@ import 'react-toastify/dist/ReactToastify.min.css';
 
 import styles from './styles.module.scss';
 import Input from '../../components/Input';
-import logo from '../../assets/logo.jpg';
+import Header from '../../components/Header';
 
 import { getValidationErrors } from '../../utils/getValidationErrors';
 import { Data } from '../../utils/types';
@@ -80,10 +78,7 @@ const Home = () => {
 
   return (
     <div className={styles.homeContainer}>
-      <header className={styles.header}>
-        <img src={logo} alt="elogroup" />
-        <h1>Elogroup</h1>
-      </header>
+      <Header />
       <Form ref={formRef} onSubmit={handleSubmit} className={styles.form}>
         <Input name="user" labelName="Usuário" icon={FiUser} />
         <Input

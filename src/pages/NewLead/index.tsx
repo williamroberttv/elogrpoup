@@ -1,15 +1,16 @@
 import { useState, useContext, useRef } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import { Form } from '@unform/web';
-import { MdEmail, MdPhone } from 'react-icons/md';
-import * as yup from 'yup';
-
 import { FormHandles, Scope } from '@unform/core';
-import { useHistory } from 'react-router-dom';
+import * as yup from 'yup';
+import { MdEmail, MdPhone } from 'react-icons/md';
+
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
-import Input from '../../components/Input';
-import logo from '../../assets/logo.jpg';
+
 import styles from './styles.module.scss';
+import Input from '../../components/Input';
+import Header from '../../components/Header';
 import Checkbox from '../../components/Checkbox';
 import { NewLeadProps } from '../../utils/types';
 import { LeadContext } from '../../context/leadContext';
@@ -76,10 +77,9 @@ const NewLead = () => {
   return (
     <Form onSubmit={handleNewLead} ref={formRef}>
       <div className={styles.infoContainer}>
-        <header>
-          <img src={logo} alt="logo elogroup" />
-          <h1>EloGroup</h1>
-        </header>
+        <Link to="dashboard">
+          <Header />
+        </Link>
         <Input name="name" labelName="Nome" />
         <Input name="contact" labelName="Telefone" icon={MdPhone} />
         <Input name="email" type="email" labelName="E-mail" icon={MdEmail} />

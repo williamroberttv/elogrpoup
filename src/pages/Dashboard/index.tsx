@@ -8,8 +8,8 @@ import { LeadContext } from '../../context/leadContext';
 const Dashboard = () => {
   const user = localStorage.getItem('user');
   const { leads } = useContext(LeadContext);
-  const [confirmed, setConfirmed] = useState<string[]>(['Kil']);
-  const [agend, setAgend] = useState<string[]>(['Mila']);
+  const [confirmed, setConfirmed] = useState<string[]>(['Apple']);
+  const [agend, setAgend] = useState<string[]>(['Facebook']);
   const [, drop] = useDrop(() => ({
     accept: 'CARD',
     hover(item) {
