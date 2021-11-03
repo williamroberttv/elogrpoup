@@ -36,13 +36,18 @@ export interface NewLeadProps {
 
 export interface LeadContextProps {
   leads: Leads[];
-  // eslint-disable-next-line no-unused-vars
+  confirmedData: Leads[];
+  scheduledData: Leads[];
   getNewLead: (object: Leads) => void;
+  getConfirmedData: (object: Leads) => void;
+  handleConfirmedData: (arr: Leads[]) => void;
+  handleScheduledData: (arr: Leads[]) => void;
 }
 export interface LeadProviderProps {
   children: ReactNode;
 }
 export interface Leads {
+  id: number;
   name: string;
   email: string;
   contact: string;
