@@ -43,6 +43,7 @@ const NewLead = () => {
 
       const formatedCategories = getCategories.filter((item) => item);
       const formatedData = {
+        id: Number((Math.random() * (10000 - 1) + 1).toFixed()),
         name: data.name,
         email: data.email,
         contact: data.contact,
@@ -53,8 +54,14 @@ const NewLead = () => {
 
       const schema = yup.object().shape({
         name: yup.string().required('Digite o nome da empresa'),
-        email: yup.string().required('E-mail obrigatório'),
-        contact: yup.string().required('Digite um telefone para contato')
+        email: yup
+          .string()
+          .email('Digite um e-mail válido')
+          .required('E-mail obrigatório'),
+        contact: yup
+          .string()
+          .matches(/^[0-9]*$/, 'O contato deve conter números válidos')
+          .required('Digite um telefone para contato')
       });
 
       await schema.validate(data, {
